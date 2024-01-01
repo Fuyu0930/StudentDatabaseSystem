@@ -6,17 +6,17 @@
 
 using namespace std;
 
-// Create student class for the system
-
-
 void intro();
-void pause();
 void EntryMenu();
 void DisplayAll();
 
 int main() {
      char ch;
+     char exit;
      Student student;
+     // cout.setf: sets the format flags of the stream cout.
+     // ios::fixed: sets the floating-point formatting to fixed-point notation.
+     // ios::showpoint: This flag forces the output to show the decimal point and trailing zeros, even if the number is an integer or if its fractional part is zero. 
      cout.setf(ios::fixed | ios::showpoint);
      cout << setprecision(2); // 88.98989 => 88.98
      intro();
@@ -40,13 +40,18 @@ int main() {
                     break;
                case '3':
                     // use wants to exit the system
-                    break;
+                    cout << "\nYou want to exit the system. Are you sure to exit? (y/n): ";
+                    cin >> exit;
+                    if (exit == 'y' || exit == 'Y') {
+                         break;
+                    } else {
+                         continue;
+                    }
                default: cout << "\a";
           }
-     } while (ch != '3');
+     } while (exit != 'y' && exit != 'Y');
     
-     cout << "\nYou exit the home page.";
-     pause();
+     system("clear");
 
      return 0;
 }
@@ -55,69 +60,71 @@ void intro() {
      cout << "\n\n\n**** WELCOME TO STUDENT DATABASE MANAGEMENT AND RESULT CALCULATION SYSTEM ****\n\n";
 }
 
-void pause() {
-     cout << "\nPress any key to exit ";
-     cin.ignore();
-     std::getchar();
-}
-
 void EntryMenu() {
      //1. Variables declaration
      char input;
      int num; // get the input from the user
-     Student student;
-     system("clear");
+     
+     do {
+          Student student;
+          system("clear");
+          //2. Print the menu on the output screen
+          cout << "\n\n\n\t\t\tSTUDENT DATABASE MANAGEMENT MENU";
+          cout << "\n\n\t1. CREATE STUDENT RECORD";
+          cout << "\n\n\t2. SHOW RECORDS OF ALL STUDENTS";
+          cout << "\n\n\t3. SEARCH STUDENT RECORD";
+          cout << "\n\n\t4. UPDATE STUDENT RECORD";
+          cout << "\n\n\t5. DELETE STUDENT RECORD";
+          cout << "\n\n\t6. BACK TO HOME SCREEN";
+          cout << "\n\n\n\n\tPlease Enter Your Choice (1-6): ";
 
-     //2. Print the menu on the output screen
-     cout << "\n\n\n\t\t\tSTUDENT DATABASE MANAGEMENT MENU";
-     cout << "\n\n\t1. CREATE STUDENT RECORD";
-     cout << "\n\n\t2. SHOW RECORDS OF ALL STUDENTS";
-     cout << "\n\n\t3. SEARCH STUDENT RECORD";
-     cout << "\n\n\t4. UPDATE STUDENT RECORD";
-     cout << "\n\n\t5. DELETE STUDENT RECORD";
-     cout << "\n\n\t6. BACK TO HOME SCREEN";
-     cout << "\n\n\n\n\tPlease Enter Your Choice (1-6): ";
+          //3. Take input from user that are numbers from 1 - 6
+          cin >> input;
+          if (cin.fail()) {
+               cin.clear();
+               cin.ignore(numeric_limits<streamsize>::max(), '\n');
+               continue;
+          }
+          system("clear");
 
-     //3. Take input from user that are numbers from 1 - 6
-     cin >> input;
-     system("clear");
-
-     //4. Add switch and add 6 cases in the switch
-     switch(input) {
-          case '1':
-               // Create student record
-               student.WriteStudentRecordInFile();
-               break;
-          case '2':
-               // Show records of all students in the file
-               DisplayAll(); // It is showing records of all students in the file
-               break;
-          case '3':
-               // Searching a record of a student
-               cout << "\n\n\t Please Enter the Roll Number: ";
-               cin >> num; // We are receiving roll number from the system user
-               student.ShowStudentRecord(num);
-               break;
-          case '4':
-               // Updating student's record
-               // Searching a record of a student
-               cout << "\n\n\t Please Enter the Roll Number: ";
-               cin >> num; // We are receiving roll number from the system user
-               student.UpdateStudentRecord(num);
-               break;
-          case '5': 
-               // Delete student's record
-               cout << "\n\n\t Please Enter the Roll Number: ";
-               cin >> num;
-               student.DeleteStudentRecord(num);
-               break;
-          case '6':
-               // Go back to the home screen
-               break;
-          default: 
-               cout << "\a";
-               EntryMenu();
-     }
+          //4. Add switch and add 6 cases in the switch
+          switch(input) {
+               case '1':
+                    // Create student record
+                    student.WriteStudentRecordInFile();
+                    break;
+               case '2':
+                    // Show records of all students in the file
+                    DisplayAll(); // It is showing records of all students in the file
+                    break;
+               case '3':
+                    // Searching a record of a student
+                    cout << "\n\n\t Please Enter the Roll Number: ";
+                    cin >> num; // We are receiving roll number from the system user
+                    student.ShowStudentRecord(num);
+                    break;
+               case '4':
+                    // Updating student's record
+                    // Searching a record of a student
+                    cout << "\n\n\t Please Enter the Roll Number: ";
+                    cin >> num; // We are receiving roll number from the system user
+                    student.UpdateStudentRecord(num);
+                    break;
+               case '5': 
+                    // Delete student's record
+                    cout << "\n\n\t Please Enter the Roll Number: ";
+                    cin >> num;
+                    student.DeleteStudentRecord(num);
+                    break;
+               case '6':
+                    // Go back to the home screen
+                    break;
+               default: 
+                    cout << "\a";
+                    EntryMenu();
+          }
+     } while (input != '6');
+     
 }
 
 void DisplayAll() {
