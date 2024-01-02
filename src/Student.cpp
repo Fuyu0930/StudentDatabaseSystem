@@ -61,6 +61,43 @@ char Student::GetStudentGrade() {
      return studentGrade;
 }
 
+bool Student::CompareName(Student& a, Student& b) {
+     return a.GetStudentName() <= b.GetStudentName();
+}
+
+bool Student::CompareRollNum(Student& a, Student& b) {
+     return a.GetStudentRollNum() <= b.GetStudentRollNum();
+}
+
+bool Student::CompareSocMarks(Student& a, Student& b) {
+     return a.GetStudentSocMarks() >= b.GetStudentSocMarks();
+}
+
+bool Student::CompareStatMarks(Student& a, Student& b) {
+     return a.GetStudentStatMarks() >= b.GetStudentStatMarks();
+}
+
+bool Student::CompareMathsMarks(Student& a, Student& b) {
+     return a.GetStudentMathsMarks() >= b.GetStudentMathsMarks();
+}
+
+bool Student::CompreEnglishMarks(Student& a, Student& b) {
+     return a.GetStudentEnglishMarks() >= b.GetStudentEnglishMarks();
+}
+
+bool Student::CompareCSMarks(Student& a, Student& b) {
+     return a.GetStudentCSMarks() >= b.GetStudentCSMarks();
+}
+
+bool Student::ComparePercentage(Student& a, Student& b) {
+     return a.GetStudentPercentage() >= b.GetStudentPercentage();
+}
+
+bool Student::CompareGrade(Student& a, Student& b) {
+     return a.GetStudentGrade() >= b.GetStudentGrade();
+}
+
+
 void Student::GetData() {
      // Takes input as student data from user
      flag = false;
@@ -149,8 +186,6 @@ void Student::TabularDisplay() {
      cout << rollNum << setw(4) << " " << studentName << setw(20-strlen(studentName)) << socialStudiesMarks << setw(6) << statMarks << setw(6) << mathsMarks << setw(6) << englishMarks << setw(6) << computerMarks << setw(8) << studentPercentage << setw(8) << studentGrade << endl;
 }
 
-
-
 void Student::ShowStudentRecord(int target) {
      ifstream inFile;
      inFile.open("student.dat", ios::binary);
@@ -203,7 +238,6 @@ void Student::WriteStudentRecordInFile() {
      outFile.close();
      cin.ignore();
      cin.get();
-
 }
 
 void Student::UpdateStudentRecord(int num) {
@@ -364,66 +398,99 @@ void Student::ShowResultMenu() {
 
 void Student::DisplayClassResult() {
      // 0. Declare variables
-     char exportCSV;
+     char userInput;
 
-     // 1. Opens file student.dat
-     ifstream inFile;
-     inFile.open("student.dat", ios::binary);
+     do {
+          system("clear");
+          // 1. Opens file student.dat
+          ifstream inFile;
+          inFile.open("student.dat", ios::binary);
 
-     // 2. If file does not open, print error message
-     if (!inFile) {
-          cout << "File could not be opened... Press any key ";
-          cin.ignore();
-          cin.get();
-          return;
-     }
-
-     // 3. If file opens:
-
-     // 3.1 system will give heading of class result on output screen
-     cout << "\n\n\t\tALL CLASS RESULT \n\n";
-     cout << "=========================================================================\n";
-     cout << "R.No          Name          Soc  Stats  M     E       CS    %age    Grade" << endl;
-     cout << "=========================================================================\n";
-
-     // 3.2 Use a while loop and it will run as long as it is reading records from the file student.dat
-     if (studentList.empty()) {
-          while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student))) {
-               studentList.push_back(*this); // Adds a copy of the current object
-          }    
-     }
-     
-     // 4. Close file
-     inFile.close();
-
-     // 5. Show the Tabular display
-     for (int i = 0; i < studentList.size(); i++) {
-          studentList[i].TabularDisplay();
-     }
-
-     // 5. Clear input buffer
-     cout << "\nPress 1 to export the CSV file.";
-     cout << "\nPress 2 to sort by Overall Percentage";
-     cout << "\nPress 3 to exit";
-     cout << "\nPlease enter your option: ";
-     cin >> exportCSV;
-
-     switch(exportCSV) {
-          case '1':
-               system("clear");
-               ExportResultCSV(studentList);
-               break;
-          case '2':
-               sort(studentList.begin(), studentList.end(), ComparePercentage);
-               DisplayClassResult();
-          case '3':
+          // 2. If file does not open, print error message
+          if (!inFile) {
+               cout << "File could not be opened... Press any key ";
                cin.ignore();
                cin.get();
-               studentList.clear();
                return;
-          default:
-               cout << '\a';
-     }
+          }
+
+          // 3. If file opens:          
+
+          // Use a while loop and it will run as long as it is reading records from the file student.dat
+          if (studentList.empty()) {
+               while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student))) {
+                    studentList.push_back(*this); // Adds a copy of the current object
+               }    
+          }
+          
+          // 4. Close file
+          inFile.close();
+
+          // 5. Show the Header and Tabular display
+          cout << "\n\n\t\tALL CLASS RESULT \n\n";
+          cout << "=========================================================================\n";
+          cout << "R.No          Name          Soc  Stats  M     E       CS    %age    Grade" << endl;
+          cout << "=========================================================================\n";
+          for (int i = 0; i < studentList.size(); i++) {
+               studentList[i].TabularDisplay();
+          }
+
+          // 5. Clear input buffer
+          cout << "\nPress 1 to export the CSV file.";
+          cout << "\nPress 2 to sort by Student Name";
+          cout << "\nPress 3 to sort by Roll Number";
+          cout << "\nPress 4 to sort by Social Study Marks";
+          cout << "\nPress 5 to sort by Statistics Marks";
+          cout << "\nPress 6 to sort by Maths Marks";
+          cout << "\nPress 7 to sort by English Marks";
+          cout << "\nPress 8 to sort by Computer Science Marks";
+          cout << "\nPress 9 to sort by Overall Percentage";
+          cout << "\nPress a to sort by Overall Grade";
+          cout << "\nPress b to exit";
+          cout << "\nPlease enter your option: ";
+          cin >> userInput;
+
+          switch(userInput) {
+               case '1':
+                    system("clear");
+                    ExportResultCSV(studentList);
+                    studentList.clear();
+                    break;
+               case '2':
+                    sort(studentList.begin(), studentList.end(), CompareName);
+                    continue;
+               case '3':
+                    sort(studentList.begin(), studentList.end(), CompareRollNum);
+                    continue;
+               case '4':
+                    sort(studentList.begin(), studentList.end(), CompareSocMarks);
+                    continue;
+               case '5':
+                    sort(studentList.begin(), studentList.end(), CompareStatMarks);
+                    continue;
+               case '6':
+                    sort(studentList.begin(), studentList.end(), CompareMathsMarks);
+                    continue;
+               case '7':
+                    sort(studentList.begin(), studentList.end(), CompreEnglishMarks);
+                    continue;
+               case '8':
+                    sort(studentList.begin(), studentList.end(), CompareCSMarks);
+                    continue;
+               case '9':
+                    sort(studentList.begin(), studentList.end(), ComparePercentage);
+                    continue;
+               case 'a':
+                    sort(studentList.begin(), studentList.end(), CompareGrade);
+                    continue;
+               case 'b':
+                    studentList.clear();
+                    continue;
+               default:
+                    cout << '\a';
+          }
+     } while (userInput != '1' && userInput != 'b');
+     
 }
 
 string Student::CSVDisplay() {
@@ -435,9 +502,5 @@ string Student::CSVDisplay() {
       string computerStr = to_string(computerMarks);
       string percentageStr = to_string(studentPercentage);
       return rollNumStr + ", " + studentName + ", " + socialStudiesStr + ", " + statStr + ", " + mathsStr + ", " + englishStr + ", " + computerStr + ", " + percentageStr + ", " + studentGrade + ",\n";
-}
-
-bool Student::ComparePercentage(Student& a, Student& b) {
-     return a.GetStudentPercentage() >= b.GetStudentPercentage();
 }
 

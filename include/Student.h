@@ -31,6 +31,15 @@ class Student {
           int GetStudentCSMarks();
           double GetStudentPercentage();
           char GetStudentGrade();
+          static bool CompareName(Student& a, Student& b);
+          static bool CompareRollNum(Student& a, Student& b);
+          static bool CompareSocMarks(Student& a, Student& b);
+          static bool CompareStatMarks(Student& a, Student& b);
+          static bool CompareMathsMarks(Student& a, Student& b);
+          static bool CompreEnglishMarks(Student& a, Student& b);
+          static bool CompareCSMarks(Student& a, Student& b);
+          static bool ComparePercentage(Student& a, Student& b);
+          static bool CompareGrade(Student& a, Student& b);
           void ShowStudentRecord(int); // is used to display record of a student with a particular roll number given in function argument
           void WriteStudentRecordInFile(); // Write user input in file student.dat
           void UpdateStudentRecord(int); // accepts roll number and update record of binary file, i.e., student.dat
@@ -39,7 +48,7 @@ class Student {
           void ShowResultMenu(); // shows the Result Menu to the user that takes choice from the user to see whether user wants to see class result or individual student result
           void DisplayClassResult(); // displays the result of complete class on the output screen
           string CSVDisplay(); // displays student information in terms of CSV format
-          static bool ComparePercentage(Student& a, Student& b);
+          
 };
 
 #endif
