@@ -5,11 +5,13 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 using namespace std;
 
 // Set up the global variable
 int rollNumToBeUpdated = 0;
+vector<Student> studentList;
 
 /* **************** The Student Class **************** */
 // Constructor
@@ -21,6 +23,42 @@ Student::Student() {
      // creating DuplicateCheckingFile.txt
      ofstream outDFile("DuplicateCheckingFile.txt", ios::app);
      outDFile.close();
+}
+
+int Student::GetStudentRollNum() {
+     return rollNum;
+}
+
+string Student::GetStudentName() {
+     return string(studentName);
+}
+
+int Student::GetStudentSocMarks() {
+     return socialStudiesMarks;
+}
+
+int Student::GetStudentStatMarks() {
+     return statMarks;
+}
+
+int Student::GetStudentMathsMarks() {
+     return mathsMarks;
+}
+
+int Student::GetStudentEnglishMarks() {
+     return englishMarks;
+}
+
+int Student::GetStudentCSMarks() {
+     return computerMarks;
+}
+
+double Student::GetStudentPercentage() {
+     return studentPercentage;
+}
+
+char Student::GetStudentGrade() {
+     return studentGrade;
 }
 
 void Student::GetData() {
@@ -111,9 +149,7 @@ void Student::TabularDisplay() {
      cout << rollNum << setw(4) << " " << studentName << setw(20-strlen(studentName)) << socialStudiesMarks << setw(6) << statMarks << setw(6) << mathsMarks << setw(6) << englishMarks << setw(6) << computerMarks << setw(8) << studentPercentage << setw(8) << studentGrade << endl;
 }
 
-int Student::GetStudentRollNum() {
-     return rollNum;
-}
+
 
 void Student::ShowStudentRecord(int target) {
      ifstream inFile;
@@ -327,7 +363,9 @@ void Student::ShowResultMenu() {
 }
 
 void Student::DisplayClassResult() {
+     // 0. Declare variables
      char exportCSV;
+
      // 1. Opens file student.dat
      ifstream inFile;
      inFile.open("student.dat", ios::binary);
@@ -349,27 +387,39 @@ void Student::DisplayClassResult() {
      cout << "=========================================================================\n";
 
      // 3.2 Use a while loop and it will run as long as it is reading records from the file student.dat
-     while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student))) {
-          // Inside the loop, call the function Tabular Display that prints student's data on the screen
-          TabularDisplay();
-     }    
+     if (studentList.empty()) {
+          while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student))) {
+               studentList.push_back(*this); // Adds a copy of the current object
+          }    
+     }
      
      // 4. Close file
      inFile.close();
 
+     // 5. Show the Tabular display
+     for (int i = 0; i < studentList.size(); i++) {
+          studentList[i].TabularDisplay();
+     }
+
      // 5. Clear input buffer
      cout << "\nPress 1 to export the CSV file.";
-     cout << "\nPress 2 to exit";
+     cout << "\nPress 2 to sort by Overall Percentage";
+     cout << "\nPress 3 to exit";
      cout << "\nPlease enter your option: ";
      cin >> exportCSV;
 
      switch(exportCSV) {
           case '1':
-               ExportResultCSV();
+               system("clear");
+               ExportResultCSV(studentList);
                break;
           case '2':
+               sort(studentList.begin(), studentList.end(), ComparePercentage);
+               DisplayClassResult();
+          case '3':
                cin.ignore();
                cin.get();
+               studentList.clear();
                return;
           default:
                cout << '\a';
@@ -386,3 +436,8 @@ string Student::CSVDisplay() {
       string percentageStr = to_string(studentPercentage);
       return rollNumStr + ", " + studentName + ", " + socialStudiesStr + ", " + statStr + ", " + mathsStr + ", " + englishStr + ", " + computerStr + ", " + percentageStr + ", " + studentGrade + ",\n";
 }
+
+bool Student::ComparePercentage(Student& a, Student& b) {
+     return a.GetStudentPercentage() >= b.GetStudentPercentage();
+}
+

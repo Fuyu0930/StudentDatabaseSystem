@@ -22,7 +22,15 @@ class Student {
           void CheckForDuplicationInFile();
           void ShowData();
           void TabularDisplay(); // Used to display the result of all students in the form of a table
+          string GetStudentName();
           int GetStudentRollNum(); // Returns the roll number of the current student
+          int GetStudentSocMarks();
+          int GetStudentStatMarks();
+          int GetStudentMathsMarks();
+          int GetStudentEnglishMarks();
+          int GetStudentCSMarks();
+          double GetStudentPercentage();
+          char GetStudentGrade();
           void ShowStudentRecord(int); // is used to display record of a student with a particular roll number given in function argument
           void WriteStudentRecordInFile(); // Write user input in file student.dat
           void UpdateStudentRecord(int); // accepts roll number and update record of binary file, i.e., student.dat
@@ -31,6 +39,7 @@ class Student {
           void ShowResultMenu(); // shows the Result Menu to the user that takes choice from the user to see whether user wants to see class result or individual student result
           void DisplayClassResult(); // displays the result of complete class on the output screen
           string CSVDisplay(); // displays student information in terms of CSV format
+          static bool ComparePercentage(Student& a, Student& b);
 };
 
 #endif

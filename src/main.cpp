@@ -7,13 +7,14 @@
 #include <filesystem>
 
 #include "Student.h"
+#include "main.h"
 
 using namespace std;
 
 void intro();
 void EntryMenu();
 void DisplayAll();
-void ExportResultCSV();
+void ExportResultCSV(vector<Student>);
 
 int main() {
      char ch;
@@ -164,37 +165,13 @@ void DisplayAll() {
      return;
 }
 
-void ExportResultCSV() {
-     // 1. Declare variables 
-     vector<Student> studentList;
-     Student studentObj;
-
-     // 2. Opens file student.dat
-     ifstream File;
-     File.open("student.dat", ios::binary);
-
-     // 3. If file does not open, print error message
-     if (!File) {
-          cout << "File could not be opened... Press any key ";
-          cin.ignore();
-          cin.get();
-          return;
-     }
-
-     // 4. If file opens
-     while (File.read(reinterpret_cast<char*>(&studentObj), sizeof(Student))) {
-          studentList.push_back(studentObj);
-     }
-
-     // 5. Close file
-     File.close();
-
-     // 6. Check whether csv file exists or not
+void ExportResultCSV(vector<Student> studentList) {
+     // 1. Check whether csv file exists or not
      if (filesystem::exists("StudentGrade.csv")) {
           filesystem::remove("StudentGrade.csv");
      }
 
-     // 7. Opens StudentGrade.csv
+     // 2. Opens StudentGrade.csv
      ofstream csvFile;
      csvFile.open("StudentGrade.csv");
      csvFile << "Roll Number, Name, Social Science, Statistics, Maths, English, Computer Science, Percentage, Grade,\n";
@@ -203,14 +180,15 @@ void ExportResultCSV() {
           csvFile << studentList[i].CSVDisplay();
      }
 
-     // 7. Close StudentGrade.csv
+     // 3. Close StudentGrade.csv
      csvFile.close();
 
-     // 8. Print message
-     cout << "\n\nThe csv file has already exported successfully!\nPress ENTER to leave.";
+     // 4. Print message
+     cout << "\n\nThe csv file has already exported successfully!\nThe file name is: StudentGrade.csv\nPress ENTER to leave.";
 
      cin.ignore();
      cin.get();
 
      return;
 }
+
