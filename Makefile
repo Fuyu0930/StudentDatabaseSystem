@@ -1,6 +1,6 @@
 # Compiler settings - Can be customized.
 CC = g++
-CCFLAGS = -Wall -Iinclude
+CCFLAGS = -std=c++17 -Wall -Iinclude
 
 # Build target
 TARGET = StudentDatabase

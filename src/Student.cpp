@@ -1,6 +1,10 @@
 #include "Student.h"
+#include "main.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -87,7 +91,6 @@ void Student::ShowData() {
      cout << "\nMarks in Computer: " << computerMarks;
      cout << "\nPercentage of student: " << studentPercentage;
      cout << "\nGrade of student: " << studentGrade;
-     cout << "\n***************************************************";
 }
 
 void Student::CalculateGrade() {
@@ -197,6 +200,7 @@ void Student::UpdateStudentRecord(int num) {
                     int pos = (-1) * static_cast<int>(sizeof(*this));
                     File.seekp(pos, ios::cur);
                     File.write(reinterpret_cast<char *>(this), sizeof(Student));
+                    cout << "\nUpdate is complete. Press the ENTER key to exit.";
                }
                found = true;
           }
@@ -323,13 +327,14 @@ void Student::ShowResultMenu() {
 }
 
 void Student::DisplayClassResult() {
+     char exportCSV;
      // 1. Opens file student.dat
      ifstream inFile;
      inFile.open("student.dat", ios::binary);
 
      // 2. If file does not open, print error message
      if (!inFile) {
-          cout << "File could not be opened... Press any key";
+          cout << "File could not be opened... Press any key ";
           cin.ignore();
           cin.get();
           return;
@@ -353,6 +358,31 @@ void Student::DisplayClassResult() {
      inFile.close();
 
      // 5. Clear input buffer
-     cin.ignore();
-     cin.get();
+     cout << "\nPress 1 to export the CSV file.";
+     cout << "\nPress 2 to exit";
+     cout << "\nPlease enter your option: ";
+     cin >> exportCSV;
+
+     switch(exportCSV) {
+          case '1':
+               ExportResultCSV();
+               break;
+          case '2':
+               cin.ignore();
+               cin.get();
+               return;
+          default:
+               cout << '\a';
+     }
+}
+
+string Student::CSVDisplay() {
+      string rollNumStr = to_string(rollNum);
+      string socialStudiesStr = to_string(socialStudiesMarks);
+      string statStr = to_string(statMarks);
+      string mathsStr = to_string(mathsMarks);
+      string englishStr = to_string(englishMarks);
+      string computerStr = to_string(computerMarks);
+      string percentageStr = to_string(studentPercentage);
+      return rollNumStr + ", " + studentName + ", " + socialStudiesStr + ", " + statStr + ", " + mathsStr + ", " + englishStr + ", " + computerStr + ", " + percentageStr + ", " + studentGrade + ",\n";
 }

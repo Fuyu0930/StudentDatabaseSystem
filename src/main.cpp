@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip> // supports setw function that is used to give spaces on the output screen
+#include <string>
+#include <cstring>
+#include <vector>
+#include <filesystem>
 
 #include "Student.h"
 
@@ -9,6 +13,7 @@ using namespace std;
 void intro();
 void EntryMenu();
 void DisplayAll();
+void ExportResultCSV();
 
 int main() {
      char ch;
@@ -147,11 +152,65 @@ void DisplayAll() {
      cout << "\n\n\n\n\t\tDISPLAY ALL RECORDs \n\n";
      while (inFile.read(reinterpret_cast<char *> (&student), sizeof(Student))) {
           student.ShowData(); // ShowData is executed for each record of student in the file
+          cout << "\n***************************************************\n";
      }
 
+     
+     cout << "\nPress ENTER key to exit... ";
      // 5 Close file using object & clear input buffers
      inFile.close();
      cin.ignore();
      cin.get();
+     return;
+}
+
+void ExportResultCSV() {
+     // 1. Declare variables 
+     vector<Student> studentList;
+     Student studentObj;
+
+     // 2. Opens file student.dat
+     ifstream File;
+     File.open("student.dat", ios::binary);
+
+     // 3. If file does not open, print error message
+     if (!File) {
+          cout << "File could not be opened... Press any key ";
+          cin.ignore();
+          cin.get();
+          return;
+     }
+
+     // 4. If file opens
+     while (File.read(reinterpret_cast<char*>(&studentObj), sizeof(Student))) {
+          studentList.push_back(studentObj);
+     }
+
+     // 5. Close file
+     File.close();
+
+     // 6. Check whether csv file exists or not
+     if (filesystem::exists("StudentGrade.csv")) {
+          filesystem::remove("StudentGrade.csv");
+     }
+
+     // 7. Opens StudentGrade.csv
+     ofstream csvFile;
+     csvFile.open("StudentGrade.csv");
+     csvFile << "Roll Number, Name, Social Science, Statistics, Maths, English, Computer Science, Percentage, Grade,\n";
+
+     for (int i = 0; i < studentList.size(); i++){
+          csvFile << studentList[i].CSVDisplay();
+     }
+
+     // 7. Close StudentGrade.csv
+     csvFile.close();
+
+     // 8. Print message
+     cout << "\n\nThe csv file has already exported successfully!\nPress ENTER to leave.";
+
+     cin.ignore();
+     cin.get();
+
      return;
 }

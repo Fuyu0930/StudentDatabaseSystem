@@ -1,6 +1,9 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
+#include <string>
+using namespace std;
+
 class Student {
      private:
           char studentName[50];
@@ -27,7 +30,7 @@ class Student {
           void DeleteFromDuplicateFile(int);// deletes record from file DuplicateCheckingFile.txt(that contains only roll no of all students..)
           void ShowResultMenu(); // shows the Result Menu to the user that takes choice from the user to see whether user wants to see class result or individual student result
           void DisplayClassResult(); // displays the result of complete class on the output screen
-
+          string CSVDisplay(); // displays student information in terms of CSV format
 };
 
 #endif
